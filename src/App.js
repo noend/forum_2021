@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './App.css';
 
-import {AllTopics, Header, Home, Login, Topic} from './components';
+import {AllTopics, Header, Home, Login, Topic, CreateTopic} from './components';
 
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
           <Route path='/topics' exact component={AllTopics} />
           <Route path='/topic/:topicId' component={Topic} />
           <Route path='/login' component={Login} />
+          <Route path='/addtopic' component={CreateTopic} />
         </Switch>
       </div>
     </BrowserRouter>

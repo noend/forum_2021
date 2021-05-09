@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import API from '../services/api';
+import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
 function Copyright() {
@@ -58,11 +58,19 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const inst = axios.create({
+        baseURL: 'http://localhost:8082',
+        auth: {
+            username: 'admin',
+            password: 'admin'
+        }
+    });
+
     const form = new FormData();
     form.append('username', email);
     form.append('password', password);
 
-    API.post('/oauth/token?grant_type=password', form, {headers: {"Content-Type": "multipart/form-data"}})
+    inst.post('/oauth/token?grant_type=password', form, {headers: {"Content-Type": "multipart/form-data"}})
         .then(function (response) {
             localStorage.setItem('access_token', response.data.access_token);
             localStorage.setItem('refresh_token', response.data.refresh_token);

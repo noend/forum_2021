@@ -1,9 +1,15 @@
-import {allTopics} from '../services/mock'
+import useFetchData from './useFetchData';
+import { CircularProgress } from '@material-ui/core';
 
 const Topic = (props) => {
+    
+    
     const topicId = +props.match.params.topicId;
-    const topic = allTopics.find(t => t.id === topicId);
-    return <>{topic.title}</>
+    const {loading, data: topic, error} = useFetchData(`/topics/${topicId}/`)
+
+    if (loading) return <CircularProgress />;
+
+    return <>{topic?.title}</>
 };
 
 export default Topic;
