@@ -23,6 +23,7 @@ const AllTopics = (props) => {
 
     const history = useHistory();
 
+    const [errors, setErrors]   =   useState()
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -32,7 +33,10 @@ const AllTopics = (props) => {
                 setTopics(res.data);
                 setLoading(false);
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                setErrors(err);
+                // console.log(err, typeof err);
+            })
     }, []);
 
     const onCellClick = (params) => {
@@ -42,14 +46,23 @@ const AllTopics = (props) => {
         }
     }
 
-    return <>
-        <h1>All Topics</h1>
-        <Button color="inherit" to='/addtopic' component={Link}>Create Topic</Button>
-        {loading && <CircularProgress/>}
-        <div style={{ height: 300, width: '100%' }}>
-            <DataGrid rows={topics} columns={columns} pageSize={5} onCellClick={onCellClick}/>
-        </div>
-    </>
+    if (topics.length > 0) {
+        return <>
+            <h1>Topics</h1>
+            <Button color="inherit" to='/addtopic' component={Link}>Create Topic</Button>
+            {loading && <CircularProgress/>}
+            <div style={{ height: 300, width: '100%' }}>
+                <DataGrid rows={topics} columns={columns} pageSize={5} onCellClick={onCellClick}/>
+            </div>
+        </>
+    } else {
+        return <>
+        <h1>Topics</h1>
+            <h3>There is no topics!</h3>
+            {(typeof errors !== undefined) ? 'If you are not logged in, please log in to see Topics!' : ''}
+        </>
+    }
+
 };
 
 export default AllTopics;

@@ -26,7 +26,8 @@ const Header = (props) => {
         <Typography variant="h6" className={classes.title}>
             <LinkUI to='/' color="inherit" component={Link}>Home</LinkUI>
         </Typography>
-        <Button color="inherit" to='/login' component={Link}>Login</Button>
+        <Button color="inherit" to='/login' component={Link}>Login</Button> /
+        <Button color="inherit" to='/register' component={Link}>Register</Button>
         </Toolbar>
     </AppBar>
 }
