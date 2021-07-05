@@ -52,7 +52,7 @@ export default function SignIn() {
   const classes = useStyles();
   const history = useHistory();
 
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (event) => {
@@ -67,14 +67,15 @@ export default function SignIn() {
     });
 
     const form = new FormData();
-    form.append('username', email);
+    form.append('username', username);
     form.append('password', password);
 
     inst.post('/oauth/token?grant_type=password', form, {headers: {"Content-Type": "multipart/form-data"}})
         .then(function (response) {
             localStorage.setItem('access_token', response.data.access_token);
             localStorage.setItem('refresh_token', response.data.refresh_token);
-            history.push('/')
+            history.push('/');
+            window.location.reload();
         })
         .catch(function (error) {
             console.log(error);
@@ -97,13 +98,13 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="User Name"
+            name="username"
+            autoComplete="username"
             autoFocus
-            value={email}
-            onChange={event => setEmail(event.target.value)}
+            value={username}
+            onChange={event => setUsername(event.target.value)}
           />
           <TextField
             variant="outlined"
@@ -117,10 +118,6 @@ export default function SignIn() {
             autoComplete="current-password"
             value={password}
             onChange={event => setPassword(event.target.value)}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button
             type="submit"
@@ -138,8 +135,8 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link href="/register" component={ Link } variant="body2">
+                {"Don't have an account? Register"}
               </Link>
             </Grid>
           </Grid>

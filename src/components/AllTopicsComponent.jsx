@@ -58,8 +58,9 @@ const AllTopics = (props) => {
     } else {
         return <>
         <h1>Topics</h1>
+            {(typeof errors !== "undefined")  ?? <Button color="inherit" to='/addtopic' component={Link} >Create Topic</Button>}
             <h3>There is no topics!</h3>
-            {(typeof errors !== undefined) ? 'If you are not logged in, please log in to see Topics!' : ''}
+            {(typeof errors !== "undefined") ? 'If you are not logged in, please log in to see Topics!' : ''}
         </>
     }
 
