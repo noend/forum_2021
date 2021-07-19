@@ -17,6 +17,20 @@ inst.interceptors.request.use(request => {
     request.headers['Authorization'] = `bearer ${getAccessToken()}`;
     return request;
 });
+// Add a 401 response interceptor
+inst.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (401 === error.response.status) {
+      localStorage.clear();
+      window.location.href = '/';
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
 
 const refreshAuthLogic = failedRequest => {
     const refresh = axios.create({
@@ -30,6 +44,7 @@ const refreshAuthLogic = failedRequest => {
     .then(tokenRefreshResponse => {
         localStorage.setItem('access_token', tokenRefreshResponse.data.access_token);
         localStorage.setItem('refresh_token', tokenRefreshResponse.data.refresh_token);
+
         failedRequest.response.config.headers['Authorization'] = 'bearer ' + tokenRefreshResponse.data.access_token;
         return Promise.resolve();
     });

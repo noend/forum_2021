@@ -1,19 +1,20 @@
 import { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
+// import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import Link from '@material-ui/core/Link';
+// import Grid from '@material-ui/core/Grid';
+// import Box from '@material-ui/core/Box';
+// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import API from '../services/api';
 import { useHistory } from 'react-router-dom';
+import UserService from "../services/user";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,11 +47,11 @@ export default function SignIn() {
     event.preventDefault();
 
     const payload = {
-        userId: 1,
-        title: title
+        title: title,
+        user: {user_id: UserService.getUser().id}
     }
-
-    API.post('/topics', payload)
+    console.log(123, payload)
+    API.post('/topics/createTopic', payload)
         .then((response) => {
             history.push('/topics');
         })
@@ -89,7 +90,7 @@ export default function SignIn() {
           >
             Add
           </Button>
-          
+
         </form>
       </div>
     </Container>

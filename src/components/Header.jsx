@@ -1,23 +1,41 @@
-import { AppBar, Toolbar, IconButton, Typography, Button, Link as LinkUI } from '@material-ui/core'
+import {AppBar, Button, IconButton, Link as LinkUI, Menu, MenuItem, Toolbar, Typography} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu';
-import { makeStyles } from '@material-ui/core/styles';
-import { Link, useHistory } from 'react-router-dom';
+import {makeStyles} from '@material-ui/core/styles';
+import {Link, useHistory} from 'react-router-dom';
+import {useState} from "react";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      flexGrow: 1,
+        flexGrow: 1,
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+        marginRight: theme.spacing(2),
     },
     title: {
-      flexGrow: 1,
+        flexGrow: 1,
     },
-  }));
+    name: {
+        flexGrow: 1,
+    },
+}));
 
 const Header = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const user = props.user;
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleLogout = () => {
         localStorage.clear();
@@ -25,21 +43,58 @@ const Header = (props) => {
         window.location.reload();
     };
 
-    return <AppBar position="static">
-        <Toolbar>
-        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" className={classes.title}>
-            <LinkUI to='/' color="inherit" component={Link}>Home</LinkUI>
-        </Typography>
-            {
-                (localStorage.getItem('access_token') !== null) ? <Button color='inherit' onClick={handleLogout}>Sign out</Button> :
-                <Button color="inherit" to='/login' component={Link}>Login</Button> }
-            { (localStorage.getItem('access_token') === null) ? <Button color="inherit" to='/register' component={Link}>Register</Button> : '' }
+    return <div className={classes.root}>
+        <AppBar position="static">
+            <Toolbar>
+                {/*{(user !== null ) ? user.firstName + ' ' + user.lastName : ''}*/}
+                <Typography variant="inherit" className={classes.title}>
+                    <LinkUI to='/' color="inherit" component={Link}>Forum MSE 2020</LinkUI>
+                </Typography>
+                {user !== null && (
+                    <div>
+                        <IconButton
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleMenu}
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>{user.firstName + ' ' + user.lastName}</MenuItem>
+                            <MenuItem onClick={handleLogout}>Sign out</MenuItem>
+                        </Menu>
+                    </div>
+                )}
+                {
+                    (user !== null) ? (
+                            ''
+                        ) :
+                        <Button color="inherit" to='/login' component={Link}>Login</Button>
+                }
+                {
+                    (user === null) ?
+                        <Button color="inherit" to='/register' component={Link}>Register</Button> : ''
+                }
 
-        </Toolbar>
-    </AppBar>
+            </Toolbar>
+        </AppBar>
+    </div>
 }
 
 export default Header;
